@@ -54,10 +54,12 @@ The API will be accessible at http://localhost:8080.
 ## API Documentation
 
 1. Swagger
-   Explore the API using the Swagger documentation available at `http://localhost:8080/swagger/index.html`
+
+  Explore the API using the Swagger documentation available at `http://localhost:8080/swagger/index.html`
 
 2. Postman
-   Import the Postman collection available at https://documenter.getpostman.com/view/11542567/2s9YyzcdBT
+
+  Import the Postman collection available at https://documenter.getpostman.com/view/11542567/2s9YyzcdBT
 
 ## Author
 
