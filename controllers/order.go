@@ -12,7 +12,7 @@ import (
 )
 
 // struct for request structure and validation
-var request struct {
+type Request struct {
 	CustomerName string `json:"customerName"`
 	Items        []struct {
 		ItemCode    string `json:"itemCode" binding:"required"`
@@ -21,6 +21,13 @@ var request struct {
 	} `json:"items" binding:"required,dive"`
 }
 
+// GetAllOrders godoc
+// @Summary Get all orders with items
+// @Description Get a list of all orders with their associated items
+// @Accept json
+// @Produce json
+// @Success 200 {object} hooks.Response
+// @Router /orders [get]
 func GetAllOrders(c *gin.Context) {
 	// initialize the db
 	db := database.GetDB()
@@ -44,6 +51,14 @@ func GetAllOrders(c *gin.Context) {
 	c.JSON(http.StatusOK, hooks.SuccessResponse(response, "Successfully retrieved all order data"))
 }
 
+// GetOrder godoc
+// @Summary Get one order with items
+// @Description Get details of a specific order with its associated items
+// @Accept json
+// @Produce json
+// @Param orderId path uint true "Order ID"
+// @Success 200 {object} hooks.Response
+// @Router /orders/{orderId} [get]
 func GetOrder(c *gin.Context) {
 	// initialize the db
 	db := database.GetDB()
@@ -75,21 +90,19 @@ func GetOrder(c *gin.Context) {
 	c.JSON(http.StatusOK, hooks.SuccessResponse(response, "Successfully retrieved order data"))
 }
 
+// CreateOrder godoc
+// @Summary Create an order
+// @Description Create a new order with the specified details
+// @Accept json
+// @Produce json
+// @Param input body Request true "Order details"
+// @Success 200 {object} hooks.Response
+// @Router /orders [post]
 func CreateOrder(c *gin.Context) {
 	// initialize the db
 	db := database.GetDB()
+	var request Request
 	
-	// struct for request structure and validation
-	// var request struct {
-	// 	CustomerName string `json:"customerName" binding:"required"`
-	// 	Items        []*struct {
-	// 		ItemCode    string `json:"itemCode" binding:"required"`
-	// 		Description string `json:"description" binding:"required"`
-	// 		Quantity    int    `json:"quantity" binding:"required,min=1"`
-	// 	} `json:"items" binding:"required,dive"`
-	// }
-	
-
 	// validate the request must be a valid json
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(http.StatusBadRequest, hooks.ErrorResponse(err.Error()))
@@ -129,6 +142,14 @@ func CreateOrder(c *gin.Context) {
 	}, "Successfully created the order data"))
 }
 
+// DeleteOrder godoc
+// @Summary Delete an order
+// @Description Delete a specific order and its associated items
+// @Accept json
+// @Produce json
+// @Param orderId path uint true "Order ID"
+// @Success 200 {object} hooks.Response
+// @Router /orders/{orderId} [delete]
 func DeleteOrder(c *gin.Context) {
 	// initialize the db
 	db := database.GetDB()
@@ -167,10 +188,20 @@ func DeleteOrder(c *gin.Context) {
 	c.JSON(http.StatusOK, hooks.SuccessResponse(nil, "Successfully deleted order data for orderID: " + orderID))
 }
 
-
+// EditOrder godoc
+// @Summary Edit an order
+// @Description Edit an existing order with the specified details
+// @Accept json
+// @Produce json
+// @Param orderId path uint true "Order ID"
+// @Param input body Request true "Order details"
+// @Success 200 {object} hooks.Response
+// @Router /orders/{orderId} [put]
 func EditOrder(c *gin.Context) {
 	// initialize the db
 	db := database.GetDB()
+
+	var request Request
 
 	orderID := c.Param("orderId")
 

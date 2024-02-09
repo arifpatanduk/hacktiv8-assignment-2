@@ -1,0 +1,132 @@
+basePath: /
+definitions:
+  controllers.Request:
+    properties:
+      customerName:
+        type: string
+      items:
+        items:
+          properties:
+            description:
+              type: string
+            itemCode:
+              type: string
+            quantity:
+              type: integer
+          required:
+          - description
+          - itemCode
+          - quantity
+          type: object
+        type: array
+    required:
+    - items
+    type: object
+  hooks.Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message: {}
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Simple REST API for order with items
+  title: Order API
+  version: "1.0"
+paths:
+  /orders:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all orders with their associated items
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/hooks.Response'
+      summary: Get all orders with items
+    post:
+      consumes:
+      - application/json
+      description: Create a new order with the specified details
+      parameters:
+      - description: Order details
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.Request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/hooks.Response'
+      summary: Create an order
+  /orders/{orderId}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a specific order and its associated items
+      parameters:
+      - description: Order ID
+        in: path
+        name: orderId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/hooks.Response'
+      summary: Delete an order
+    get:
+      consumes:
+      - application/json
+      description: Get details of a specific order with its associated items
+      parameters:
+      - description: Order ID
+        in: path
+        name: orderId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/hooks.Response'
+      summary: Get one order with items
+    put:
+      consumes:
+      - application/json
+      description: Edit an existing order with the specified details
+      parameters:
+      - description: Order ID
+        in: path
+        name: orderId
+        required: true
+        type: integer
+      - description: Order details
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.Request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/hooks.Response'
+      summary: Edit an order
+swagger: "2.0"
